@@ -3,7 +3,7 @@ Vagrant.configure("2") do |config|
     config.vm.define "zabbix-server" do |server|
       server.vm.box = "ubuntu/bionic64"
       # Configure memory, CPU, and other settings for the server VM
-      config.vm.network "forwarded_port", guest: 9092, host: 9092
+      server.vm.network "forwarded_port", guest: 80, host: 8080
       server.vm.network "private_network", ip: "192.168.50.10"
   
       server.vm.provision "shell", inline: <<-SHELL
