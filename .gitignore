@@ -1,2 +1,5 @@
 # vagrant configurations and options directory
 .vagrant/
+
+# all the log files that are relevant to my computer
+*.log
