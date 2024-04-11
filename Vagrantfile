@@ -6,7 +6,25 @@ Vagrant.configure("2") do |config|
       server.vm.network "private_network", ip: "192.168.50.10"
   
       server.vm.provision "shell", inline: <<-SHELL
-        # Install Docker and Docker Compose
+        set -e
+
+        # Installing docker's official GPG key:
+        sudo apt-get update
+        sudo apt-get install ca-certificates curl
+        sudo install -m 0755 -d /etc/apt/keyrings
+        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+        sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+        #Adding the repository to Apt sources:
+        echo \
+          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+          $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+        
+        # Installing Docker Packages
+        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        sudo service docker start
         # Install any other necessary dependencies
       SHELL
     end
