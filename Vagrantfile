@@ -3,6 +3,7 @@ Vagrant.configure("2") do |config|
     config.vm.define "zabbix-server" do |server|
       server.vm.box = "ubuntu/bionic64"
       # Configure memory, CPU, and other settings for the server VM
+      config.vm.network "forwarded_port", guest: 9092, host: 9092
       server.vm.network "private_network", ip: "192.168.50.10"
   
       server.vm.provision "shell", inline: <<-SHELL
@@ -24,7 +25,10 @@ Vagrant.configure("2") do |config|
         
         # Installing Docker Packages
         sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+        # Starting the service and giving the right permissions to the vagrant user
         sudo service docker start
+        sudo usermod -aG docker vagrant
         # Install any other necessary dependencies
       SHELL
     end
