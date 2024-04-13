@@ -2,4 +2,5 @@
 .vagrant/
 
 # all the log files that are relevant to my computer
-ubuntu-bionic-18.04-cloudimg-console.log
+*.log
+

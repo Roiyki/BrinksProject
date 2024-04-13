@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
       # Configure memory, CPU, and other settings for the server VM
       server.vm.network "forwarded_port", guest: 80, host: 8080
       server.vm.network "private_network", ip: "192.168.50.10"
-  
+      server.vm.boot_timeout = 120
       server.vm.provision "shell", inline: <<-SHELL
         set -e
 
