@@ -10,11 +10,22 @@ Vagrant.configure("2") do |config|
       server.vm.network "forwarded_port", guest: 80, host: 8090
       server.vm.network "forwarded_port", guest: 3000, host: 3000
       server.vm.network "private_network", ip: "192.168.50.10"
+      #Creating linked directories between docker volumes and local directories
+      config.vm.synced_folder "/var/lib/docker/volumes/postgres/", "/var/lib/postgresql/data/pgdata"
+      config.vm.synced_folder "/var/lib/docker/volumes/zabbix/", "zabbix_alertscripts:/usr/lib/zabbix/alertscripts"
+      config.vm.synced_folder "/var/lib/docker/volumes/graf_data/", "grafana_data:/var/lib/grafana"
+      config.vm.synced_folder "/var/lib/docker/volumes/graf_config/", "grafana_config:/etc/grafana"
+      #Starting the provisioning commands
       server.vm.provision "shell", inline: <<-SHELL
         # Load environment variables from .env file
         source /c/Brinks/BrinksProject/.env
         # Set automatic exit when an error comes up when running the vm
         set -e
+        # Making directories to store volumes of the containers on the host machine 
+        sudo mkdir -p /var/lib/docker/volumes/postgres/
+        sudo mkdir -p /var/lib/docker/volumes/zabbix/
+        sudo mkdir -p /var/lib/docker/volumes/graf_data/
+        sudo mkdir -p /var/lib/docker/volumes/graf_config/
         # Installing docker's official GPG key:
         sudo apt-get update
         sudo apt-get install -y ca-certificates curl
