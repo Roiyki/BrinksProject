@@ -1,14 +1,17 @@
 Vagrant.configure("2") do |config|
+    config.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+    end
     # Zabbix Server VM
     config.vm.define "zabbix-server" do |server|
       server.vm.box = "ubuntu/bionic64"
       # Configuring networking setinngs
-      server.customize ["modifyvm", :id, "--cableconnected1", "on"]
-      server.vm.network "forwarded_port", guest: 80, host: 8080
+      server.vm.network "forwarded_port", guest: 8080, host: 8888
+      server.vm.network "forwarded_port", guest: 80, host: 8090
+      server.vm.network "forwarded_port", guest: 3000, host: 3000
       server.vm.network "private_network", ip: "192.168.50.10"
       server.vm.provision "shell", inline: <<-SHELL
         set -e
-
         # Installing docker's official GPG key:
         sudo apt-get update
         sudo apt-get install -y ca-certificates curl
@@ -29,7 +32,10 @@ Vagrant.configure("2") do |config|
         # Starting the service and giving the right permissions to the vagrant user
         sudo service docker start
         sudo usermod -aG docker vagrant
-        # Install any other necessary dependencies
+        # setting git
+        mkdir project
+        cd ./project
+        sudo apt install git
       SHELL
     end
   
