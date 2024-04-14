@@ -4,22 +4,22 @@ services:
     image: postgres:latest
     restart: always
     environment:   # Username, password and database name variables
-      POSTGRES_USER: roiyd
-      POSTGRES_PASSWORD: md506bf9bc1a8ca49cc62a18f00da116cb1
-      POSTGRES_DB: zabbix
-      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
-      PG_DATA: /var/lib/postgresql/data/pgdata #data storage
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS}
+      PG_DATA: ${PG_DATA} #data storage
   zabbix-server:     # The main Zabbix Server Software Service
     image: zabbix/zabbix-server-pgsql:ubuntu-latest
     restart: always
     environment:   # The Postgres database value variable
-      POSTGRES_USER: roiyd
-      POSTGRES_PASSWORD: md506bf9bc1a8ca49cc62a18f00da116cb1
-      POSTGRES_DB: zabbixNew
-      ZBX_HISTORYSTORAGETYPES: log,text #Zabbix configuration variables
-      ZBX_DEBUGLEVEL: 1
-      ZBX_HOUSEKEEPINGFREQUENCY: 1
-      ZBX_MAXHOUSEKEEPERDELETE: 5000
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      ZBX_HISTORYSTORAGETYPES: ${ZBX_HISTORYSTORAGETYPES} #Zabbix configuration variables
+      ZBX_DEBUGLEVEL: ${ZBX_DEBUGLEVEL}
+      ZBX_HOUSEKEEPINGFREQUENCY: ${ZBX_HOUSEKEEPINGFREQUENCY}
+      ZBX_MAXHOUSEKEEPERDELETE: ${ZBX_MAXHOUSEKEEPERDELETE}
     depends_on:
       - postgres-server
     volumes:  # Volumes for scripts and related files you can add
@@ -29,13 +29,13 @@ services:
     image: zabbix/zabbix-web-nginx-pgsql:ubuntu-latest
     restart: always
     environment:  # Postgre database variables
-      POSTGRES_USER: roiyd
-      POSTGRES_PASSWORD: md506bf9bc1a8ca49cc62a18f00da116cb1
-      POSTGRES_DB: zabbixNew
-      ZBX_SERVER_HOST: zabbix-server  # Zabbix related and Php variables
-      ZBX_POSTMAXSIZE: 64M
-      PHP_TZ: "Asia/Tel_Aviv"
-      ZBX_MAXEXECUTIONTIME: 500
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      ZBX_SERVER_HOST: ${ZBX_SERVER_HOST}  # Zabbix related and Php variables
+      ZBX_POSTMAXSIZE: ${ZBX_POSTMAXSIZE}
+      PHP_TZ: ${PHP_TZ}
+      ZBX_MAXEXECUTIONTIME: ${ZBX_MAXEXECUTIONTIME}
     depends_on:
       - postgres-server
       - zabbix-server

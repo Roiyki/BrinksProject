@@ -4,3 +4,5 @@
 # all the log files that are relevant to my computer
 *.log
 
+#Exclude enviorment variables
+.env
