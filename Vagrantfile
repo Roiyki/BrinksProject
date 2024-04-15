@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
       server.vm.network "forwarded_port", guest: 3000, host: 3000
       server.vm.network "private_network", ip: "192.168.50.10"
       #Creating linked directories between docker volumes and local directories
-      server.vm.synced_folder "C:/Brinks/BrinksProject", "/home/vagrant"
+      server.vm.synced_folder ".", "/home/vagrant/local"
       server.vm.synced_folder "C:/Brinks/Volumes/postgres", "/var/lib/docker/volumes/postgres/"
       server.vm.synced_folder "C:/Brinks/Volumes/zabbix", "/var/lib/docker/volumes/zabbix/"
       server.vm.synced_folder "C:/Brinks/Volumes/graf_data", "/var/lib/docker/volumes/graf_data/"
@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
         # Load environment variables from .env file
         # require 'dotenv'
         # Dotenv.load('.env')
-        ENV_FILE_PATH="/home/vagrant/.env"
+        ENV_FILE_PATH="/home/vagrant/local/.env"
         if [ -f "$ENV_FILE_PATH" ]; then
           # Load environment variables from .env file
           source "$ENV_FILE_PATH"
@@ -39,7 +39,8 @@ Vagrant.configure("2") do |config|
         source /c/Brinks/BrinksProject/.env
         # Set automatic exit when an error comes up when running the vm
         set -e
-        # Making directories to store volumes of the containers on the host machine 
+        # Making directories to store volumes of the containers on the host machine
+
         sudo mkdir -p /var/lib/docker/volumes/postgres/
         sudo mkdir -p /var/lib/docker/volumes/zabbix/
         sudo mkdir -p /var/lib/docker/volumes/graf_data/

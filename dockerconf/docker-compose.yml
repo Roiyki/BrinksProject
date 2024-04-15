@@ -11,7 +11,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS}
     env_file:
-      -/home/vagrant/.env
+      - /home/vagrant/local/.env
     volumes:
        - PG_DATA:${PG_DATA} #data storage
 
@@ -27,7 +27,7 @@ services:
       ZBX_HOUSEKEEPINGFREQUENCY: ${ZBX_HOUSEKEEPINGFREQUENCY}
       ZBX_MAXHOUSEKEEPERDELETE: ${ZBX_MAXHOUSEKEEPERDELETE}
     env_file:
-      -/home/vagrant/.env
+      - /home/vagrant/local/.env
     depends_on:
       - postgres-server
     volumes:  # Volumes for scripts and related files you can add
@@ -46,7 +46,7 @@ services:
       PHP_TZ: ${PHP_TZ}
       ZBX_MAXEXECUTIONTIME: ${ZBX_MAXEXECUTIONTIME}
     env_file:
-      -/home/vagrant/.env
+      - /home/vagrant/local/.env
     depends_on:
       - postgres-server
       - zabbix-server
@@ -62,7 +62,7 @@ services:
     environment:
       - ZBX_SERVER_HOST=127.0.0.1 #the IP/Dns of Zabbix server
     env_file:
-      - /home/vagrant/.env
+      - /home/vagrant/local/.env
 
 
   adminer:  #Optional for accessing databases
