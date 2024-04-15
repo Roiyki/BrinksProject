@@ -18,6 +18,12 @@ Vagrant.configure("2") do |config|
       #Starting the provisioning commands
       server.vm.provision "shell", inline: <<-SHELL
         # Load environment variables from .env file
+        require 'dotenv'
+        Dotenv.load
+        
+        # Load environment variables from .env file
+        export $(cat .env | xargs)
+        
         source /c/Brinks/BrinksProject/.env
         # Set automatic exit when an error comes up when running the vm
         set -e

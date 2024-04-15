@@ -6,3 +6,6 @@
 
 #Exclude enviorment variables
 .env
+
+#My personal Gemfile to run Dotenv
+Gemfile*
