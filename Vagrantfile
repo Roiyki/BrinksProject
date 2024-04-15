@@ -88,7 +88,7 @@ Vagrant.configure("2") do |config|
         
         #Creating a pgcrypto extension for my postgresql password and altering it
         docker exec $(docker ps -qf "name=postgres-server") psql -U $POSTGRES_USER -d zabbix -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;
-        ALTER USER '$POSTGRES_USER' PASSWORD '$POSTGRES_PASSWORD' VALID UNTIL 'infinity';"
+        ALTER USER $POSTGRES_USER PASSWORD '$POSTGRES_PASSWORD' VALID UNTIL 'infinity';"
         
         exit
         #Copying from my database the file that determines the user that is allowed to sign into the database and the login protocol

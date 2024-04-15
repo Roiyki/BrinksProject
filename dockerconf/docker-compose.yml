@@ -6,9 +6,9 @@ services:
     image: postgres:latest
     restart: always
     environment:   # Username, password and database name variables
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: '${POSTGRES_USER}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
+      POSTGRES_DB: '${POSTGRES_DB}'
       POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS}
     env_file:
       - .env
@@ -20,9 +20,9 @@ services:
     image: zabbix/zabbix-server-pgsql:ubuntu-latest
     restart: always
     environment:   # The Postgres database value variable
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: '${POSTGRES_USER}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
+      POSTGRES_DB: '${POSTGRES_DB}'
       ZBX_HISTORYSTORAGETYPES: ${ZBX_HISTORYSTORAGETYPES} #Zabbix configuration variables
       ZBX_DEBUGLEVEL: ${ZBX_DEBUGLEVEL}
       ZBX_HOUSEKEEPINGFREQUENCY: ${ZBX_HOUSEKEEPINGFREQUENCY}
@@ -39,9 +39,9 @@ services:
     image: zabbix/zabbix-web-nginx-pgsql:ubuntu-latest
     restart: always
     environment:  # Postgre database variables
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: '${POSTGRES_USER}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
+      POSTGRES_DB: '${POSTGRES_DB}'
       ZBX_SERVER_HOST: ${ZBX_SERVER_HOST}  # Zabbix related and Php variables
       ZBX_POSTMAXSIZE: ${ZBX_POSTMAXSIZE}
       PHP_TZ: ${PHP_TZ}
