@@ -1,28 +1,40 @@
 Vagrant.configure("2") do |config|
+    config.vm.boot_timeout = 600
+
+
     config.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus = 4
     end
     # Zabbix Server VM
     config.vm.define "zabbix-server" do |server|
-      server.vm.box = "ubuntu/bionic64"
+      server.vm.box = "ubuntu/focal64"
       # Configuring networking setinngs
       server.vm.network "forwarded_port", guest: 8080, host: 8888
       server.vm.network "forwarded_port", guest: 80, host: 8090
       server.vm.network "forwarded_port", guest: 3000, host: 3000
       server.vm.network "private_network", ip: "192.168.50.10"
       #Creating linked directories between docker volumes and local directories
-      config.vm.synced_folder "/var/lib/docker/volumes/postgres/", "/var/lib/postgresql/data/pgdata"
-      config.vm.synced_folder "/var/lib/docker/volumes/zabbix/", "zabbix_alertscripts:/usr/lib/zabbix/alertscripts"
-      config.vm.synced_folder "/var/lib/docker/volumes/graf_data/", "grafana_data:/var/lib/grafana"
-      config.vm.synced_folder "/var/lib/docker/volumes/graf_config/", "grafana_config:/etc/grafana"
+      server.vm.synced_folder "C:/Brinks/BrinksProject", "/home/vagrant"
+      server.vm.synced_folder "C:/Brinks/Volumes/postgres", "/var/lib/docker/volumes/postgres/"
+      server.vm.synced_folder "C:/Brinks/Volumes/zabbix", "/var/lib/docker/volumes/zabbix/"
+      server.vm.synced_folder "C:/Brinks/Volumes/graf_data", "/var/lib/docker/volumes/graf_data/"
+      server.vm.synced_folder "C:/Brinks/Volumes/graf_config", "/var/lib/docker/volumes/graf_config/"
       #Starting the provisioning commands
       server.vm.provision "shell", inline: <<-SHELL
         # Load environment variables from .env file
-        require 'dotenv'
-        Dotenv.load
-        
-        # Load environment variables from .env file
-        export $(cat .env | xargs)
+        # require 'dotenv'
+        # Dotenv.load('.env')
+        ENV_FILE_PATH="/home/vagrant/.env"
+        if [ -f "$ENV_FILE_PATH" ]; then
+          # Load environment variables from .env file
+          source "$ENV_FILE_PATH"
+          echo ".env file loaded successfully."
+        else
+          echo "Error: .env file not found at $ENV_FILE_PATH"
+        fi
         
         source /c/Brinks/BrinksProject/.env
         # Set automatic exit when an error comes up when running the vm
@@ -56,10 +68,16 @@ Vagrant.configure("2") do |config|
         sudo usermod -aG docker vagrant
 
         # setting git repository
-        mkdir project
+        if [ ! -d "project" ]; then
+          mkdir project
+        fi
         cd ./project
         sudo apt install -y git
-        git clone https://github.com/Roiyki/BrinksProject.git
+        if [ ! -d "BrinksProject" ]; then
+          git clone https://github.com/Roiyki/BrinksProject.git
+        else
+          echo "Directory 'BrinksProject' already exists. Skipping cloning."
+        fi
         cd BrinksProject/dockerconf
 
         # Starting the Docker-Compose
