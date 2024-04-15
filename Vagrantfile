@@ -36,7 +36,7 @@ Vagrant.configure("2") do |config|
           echo "Error: .env file not found at $ENV_FILE_PATH"
         fi
         
-        source /c/Brinks/BrinksProject/.env
+        ln -s /home/vagrant/local/.env /home/vagrant/project/BrinksProject/dockerconf/.env
         # Set automatic exit when an error comes up when running the vm
         set -e
         # Making directories to store volumes of the containers on the host machine
