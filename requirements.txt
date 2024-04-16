@@ -12,12 +12,6 @@ docker==20.10.7
 # Docker Compose version
 docker-compose==1.29.2
 
-# Ruby version
-ruby==3.0.0
-
-# Dotenv gem
-dotenv==2.7.6
-
 # System dependencies (Ubuntu/Debian)
 # Note: These dependencies are needed for Docker installation and configuration.
 # Please make sure you have sudo privileges to install packages.
@@ -30,7 +24,5 @@ curl
 # 2. Install VirtualBox (https://www.virtualbox.org/wiki/Downloads)
 # 3. Install Docker (https://docs.docker.com/get-docker/)
 # 4. Install Docker Compose (https://docs.docker.com/compose/install/)
-# 5. Install Ruby (https://www.ruby-lang.org/en/documentation/installation/)
-# 6. Install Dotenv gem: `gem install dotenv`
-# 7. Ensure you have sudo privileges to install packages.
+# 5. Ensure you have sudo privileges to install packages.
 

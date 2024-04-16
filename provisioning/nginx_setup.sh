@@ -1,7 +1,9 @@
 #!/bin/bash
+echo "Provisioning script #6 is running"
 
 # Copy nginx.conf from the container to a local file
-docker cp 7705cbe28b40:/etc/nginx/nginx.conf ~/nginx_copy.conf
+CONTAINER_ID=$(docker ps -qf "name=dockerconf_zabbix-web_1")
+docker cp $CONTAINER_ID:/etc/nginx/nginx.conf ~/nginx_copy.conf
 
 # Add the server block to the copied nginx.conf file
 cat <<EOT >> ~/nginx_copy.conf
@@ -28,7 +30,9 @@ server {
 EOT
 
 # Copy the modified nginx.conf back to the container
-docker cp ~/nginx_copy.conf 7705cbe28b40:/etc/nginx/nginx.conf
+docker cp ~/nginx_copy.conf $CONTAINER_ID:/etc/nginx/nginx.conf
 
 # Restart the container to apply the changes
-docker restart 7705cbe28b40
+docker restart $CONTAINER_ID
+
+echo "all done"

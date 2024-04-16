@@ -24,4 +24,3 @@ echo "restarting postgres container"
 
 # Restart the PostgreSQL container to apply changes
 docker restart $CONTAINER_ID
-echo "provisioning is ended"
