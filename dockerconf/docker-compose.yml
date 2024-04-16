@@ -53,8 +53,6 @@ services:
       - zabbix-server
     ports:    # Port where Zabbix UI is available
       - 80:80
-    command: >
-        /bin/bash -c "mkdir -p /var/lib/apt/lists/partial && chmod 755 /var/lib/apt/lists/partial && apt-get update && apt-get install -y nginx-full && nginx -g 'daemon off;'"
 
 
   zabbix-agent:   # Zabbix agent service that tracks usage and send to zabbix server

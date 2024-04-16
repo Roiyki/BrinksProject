@@ -1,8 +1,11 @@
 #!/bin/bash
 echo "Provisioning script #6 is running"
 
-# Copy nginx.conf from the container to a local file
 CONTAINER_ID=$(docker ps -qf "name=dockerconf_zabbix-web_1")
+
+sudo docker exec -u 0 -it $CONTAINER_ID bash -c "apt-get update && apt-get install -y nginx-full && nginx -g 'daemon off;'"
+
+# Copy nginx.conf from the container to a local file
 docker cp $CONTAINER_ID:/etc/nginx/nginx.conf ~/nginx_copy.conf
 
 # Add the server block to the copied nginx.conf file
