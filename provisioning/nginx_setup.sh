@@ -1,17 +1,17 @@
 #!/bin/bash
 echo "Provisioning script #6 is running"
 
+# Get the container ID
 CONTAINER_ID=$(docker ps -qf "name=dockerconf_zabbix-web_1")
 
-sudo docker exec -u 0 -it $CONTAINER_ID bash -c "apt-get update && apt-get install -y nginx-full && nginx -g 'daemon off;'"
+# Execute commands inside the Docker container with root privileges
+docker exec -u 0 $CONTAINER_ID bash -c "export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get install -y nginx-full && nginx -g 'daemon off;'"
 
-# Copy nginx.conf from the container to a local file
-docker cp $CONTAINER_ID:/etc/nginx/nginx.conf ~/nginx_copy.conf
+# Resolve dependency issues with Nginx and Zabbix
+docker exec -u 0 $CONTAINER_ID bash -c "export DEBIAN_FRONTEND=noninteractive && apt-get purge nginx nginx-common nginx-core nginx-full && apt-get install -y nginx"
 
-# Add the server block to the copied nginx.conf file
-cat <<EOT >> ~/nginx_copy.conf
-
-# Add inside the http block
+# Configure Nginx to serve the Zabbix web interface
+docker exec -u 0 $CONTAINER_ID bash -c "cat > /etc/nginx/sites-available/zabbix.conf <<EOF
 server {
     listen 80;
     server_name _;
@@ -30,12 +30,25 @@ server {
         include fastcgi_params;
     }
 }
-EOT
+EOF"
 
-# Copy the modified nginx.conf back to the container
-docker cp ~/nginx_copy.conf $CONTAINER_ID:/etc/nginx/nginx.conf
+# Copy the Zabbix configuration file to the sites-enabled directory
+docker exec -u 0 $CONTAINER_ID bash -c "ln -s /etc/nginx/sites-available/zabbix.conf /etc/nginx/sites-enabled/"
 
-# Restart the container to apply the changes
-docker restart $CONTAINER_ID
+# Comment out unsupported configuration in Nginx
+docker exec -u 0 $CONTAINER_ID bash -c "sed -i 's/aio on;/# aio on;/' /etc/nginx/nginx.conf"
 
-echo "all done"
+# Verify Nginx configuration
+echo "Verifying Nginx configuration..."
+docker exec -u 0 $CONTAINER_ID bash -c "nginx -t"
+
+# Restart Nginx to apply the changes
+echo "Restarting Nginx..."
+docker exec $CONTAINER_ID bash -c "service nginx restart"
+
+# Check if Nginx is listening on port 80
+echo "Checking if Nginx is listening on port 80..."
+docker exec $CONTAINER_ID bash -c "lsof -i :80 -s TCP:LISTEN || echo 'Nginx is not listening on port 80'"
+
+echo "Nginx configured to serve Zabbix web interface on port 80"
+echo "All done"

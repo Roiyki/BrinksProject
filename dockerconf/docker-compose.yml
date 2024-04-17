@@ -5,7 +5,7 @@ services:
   postgres-server:    # The Postgres Database Service
     image: postgres:latest
     restart: always
-    environment:   # Username, password and database name variables
+    environment:   # Username, password database name and more variables
       POSTGRES_USER: '${POSTGRES_USER}'
       POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
       POSTGRES_DB: '${POSTGRES_DB}'
@@ -19,11 +19,11 @@ services:
   zabbix-server:     # The main Zabbix Server Software Service
     image: zabbix/zabbix-server-pgsql:ubuntu-latest
     restart: always
-    environment:   # The Postgres database value variable
+    environment:  
       POSTGRES_USER: '${POSTGRES_USER}'
       POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
       POSTGRES_DB: '${POSTGRES_DB}'
-      ZBX_HISTORYSTORAGETYPES: ${ZBX_HISTORYSTORAGETYPES} #Zabbix configuration variables
+      ZBX_HISTORYSTORAGETYPES: ${ZBX_HISTORYSTORAGETYPES} 
       ZBX_DEBUGLEVEL: ${ZBX_DEBUGLEVEL}
       ZBX_HOUSEKEEPINGFREQUENCY: ${ZBX_HOUSEKEEPINGFREQUENCY}
       ZBX_MAXHOUSEKEEPERDELETE: ${ZBX_MAXHOUSEKEEPERDELETE}
@@ -31,7 +31,7 @@ services:
       - .env
     depends_on:
       - postgres-server
-    volumes:  # Volumes for scripts and related files you can add
+    volumes:  # Volumes for scripts and related files
       - ZABBIX_ALERTSCRIPTS:/usr/lib/zabbix/alertscripts
 
 
@@ -66,15 +66,15 @@ services:
       - .env
 
 
-  adminer:  #Optional for accessing databases
+  adminer:  # for accessing databases
     image: adminer
     restart: always
     ports:
       - 8080:8080
 
 
-  grafana-xxl:  #optional more functional and creative UI
-    image: monitoringartist/grafana-xxl:latest
+  grafana-xxl:  
+    image: grafana/grafana:latest
     ports:
      - 3000:3000
     volumes:
