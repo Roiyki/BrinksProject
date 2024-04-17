@@ -66,11 +66,11 @@ services:
       - .env
 
 
-  adminer:  # for accessing databases
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+  # adminer:  # for accessing databases
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
 
 
   grafana-xxl:  
