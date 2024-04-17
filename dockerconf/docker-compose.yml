@@ -52,7 +52,7 @@ services:
       - postgres-server
       - zabbix-server
     ports:    # Port where Zabbix UI is available
-      - 80:80
+      - 8090:80
 
 
   zabbix-agent:   # Zabbix agent service that tracks usage and send to zabbix server

@@ -29,8 +29,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "provisioning/volume_dirs.sh"
   config.vm.provision "shell", path: "provisioning/docker.sh"
   config.vm.provision "shell", path: "provisioning/repo_setup.sh"
-  config.vm.provision "shell", path: "provisioning/postgres_setup.sh"
-  config.vm.provision "shell", path: "provisioning/nginx_setup.sh"
+  # config.vm.provision "shell", path: "provisioning/postgres_setup.sh"
+  # config.vm.provision "shell", path: "provisioning/nginx_setup.sh"
   end
 
   # Zabbix Agent VM

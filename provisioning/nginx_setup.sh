@@ -4,31 +4,45 @@ echo "Provisioning script #6 is running"
 # Get the container ID
 CONTAINER_ID=$(docker ps -qf "name=dockerconf_zabbix-web_1")
 
-# Execute commands inside the Docker container with root privileges
-docker exec -u 0 $CONTAINER_ID bash -c "export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get install -y nginx-full && nginx -g 'daemon off;'"
+# # Execute commands inside the Docker container with root privileges
+# docker exec -u 0 $CONTAINER_ID bash -c "export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get install -y nginx-full && nginx -g 'daemon off;'"
 
-# Resolve dependency issues with Nginx and Zabbix
-docker exec -u 0 $CONTAINER_ID bash -c "export DEBIAN_FRONTEND=noninteractive && apt-get purge nginx nginx-common nginx-core nginx-full && apt-get install -y nginx"
+# # Resolve dependency issues with Nginx and Zabbix
+# docker exec -u 0 $CONTAINER_ID bash -c "export DEBIAN_FRONTEND=noninteractive && apt-get purge nginx nginx-common nginx-core nginx-full && apt-get install -y nginx"
 
 # Configure Nginx to serve the Zabbix web interface
 docker exec -u 0 $CONTAINER_ID bash -c "cat > /etc/nginx/sites-available/zabbix.conf <<EOF
 server {
-    listen 80;
-    server_name _;
+        listen 80;
 
-    root /usr/share/zabbix;
-    index index.php index.html index.htm;
+        server_name zabbix.yubeiluo.net;
+        access_log /var/log/nginx/zabbix/access.log;
+        error_log /var/log/nginx/zabbix/error.log;
 
-    location / {
-        try_files \$uri \$uri/ /index.php?\$args;
-    }
+        root /usr/share/zabbix;
 
-    location ~ \.php$ {
-        include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
-        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-        include fastcgi_params;
-    }
+        location / {
+                if ( $scheme ~ ^http: ) {
+                        rewrite ^(.*)$ https://$host$1 permanent;
+                }
+                index   index.php;
+                error_page      403     404     502     503     504     /zabbix/index.php;
+
+                location ~\.php$ {
+                        if ( !-f $request_filename ) { return 404; }
+                        expires epoch;
+                        include /etc/nginx/fastcgi_params;
+                        fastcgi_index index.php;
+                        fastcgi_pass unix:/var/run/zabbix.socket;
+                        fastcgi_param SCRIPT_FILENAME   /usr/share/zabbix/$fastcgi_script_name;
+                }
+
+                location ~ \.(jpg|jpeg|gif|png|ico)$ {
+                        access_log off;
+                        expires 33d;
+                }
+        }
+
 }
 EOF"
 
@@ -44,11 +58,11 @@ docker exec -u 0 $CONTAINER_ID bash -c "nginx -t"
 
 # Restart Nginx to apply the changes
 echo "Restarting Nginx..."
-docker exec $CONTAINER_ID bash -c "service nginx restart"
+docker exec -u 0 $CONTAINER_ID bash -c "service nginx restart"
 
 # Check if Nginx is listening on port 80
 echo "Checking if Nginx is listening on port 80..."
-docker exec $CONTAINER_ID bash -c "lsof -i :80 -s TCP:LISTEN || echo 'Nginx is not listening on port 80'"
+docker exec -u 0 $CONTAINER_ID bash -c "lsof -i :80 -s TCP:LISTEN || echo 'Nginx is not listening on port 80'"
 
 echo "Nginx configured to serve Zabbix web interface on port 80"
 echo "All done"
