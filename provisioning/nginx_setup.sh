@@ -1,14 +1,11 @@
-#!/bin/bash
+/bin/bash
 echo "Provisioning script #6 is running"
 
 # Get the container ID
 CONTAINER_ID=$(docker ps -qf "name=dockerconf_zabbix-web_1")
 
-# # Execute commands inside the Docker container with root privileges
-# docker exec -u 0 $CONTAINER_ID bash -c "export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get install -y nginx-full && nginx -g 'daemon off;'"
-
-# # Resolve dependency issues with Nginx and Zabbix
-# docker exec -u 0 $CONTAINER_ID bash -c "export DEBIAN_FRONTEND=noninteractive && apt-get purge nginx nginx-common nginx-core nginx-full && apt-get install -y nginx"
+# Create necessary directories
+docker exec -u 0 $CONTAINER_ID bash -c "mkdir -p /etc/nginx/sites-available/ /etc/nginx/sites-enabled/"
 
 # Configure Nginx to serve the Zabbix web interface
 docker exec -u 0 $CONTAINER_ID bash -c "cat > /etc/nginx/sites-available/zabbix.conf <<EOF
@@ -22,22 +19,22 @@ server {
         root /usr/share/zabbix;
 
         location / {
-                if ( $scheme ~ ^http: ) {
-                        rewrite ^(.*)$ https://$host$1 permanent;
+                if ( \$scheme ~ ^http: ) {
+                        rewrite ^(.*)$ https://\$host\$1 permanent;
                 }
                 index   index.php;
                 error_page      403     404     502     503     504     /zabbix/index.php;
 
-                location ~\.php$ {
-                        if ( !-f $request_filename ) { return 404; }
+                location ~\\.php$ {
+                        if ( !-f \$request_filename ) { return 404; }
                         expires epoch;
                         include /etc/nginx/fastcgi_params;
                         fastcgi_index index.php;
                         fastcgi_pass unix:/var/run/zabbix.socket;
-                        fastcgi_param SCRIPT_FILENAME   /usr/share/zabbix/$fastcgi_script_name;
+                        fastcgi_param SCRIPT_FILENAME   /usr/share/zabbix/\$fastcgi_script_name;
                 }
 
-                location ~ \.(jpg|jpeg|gif|png|ico)$ {
+                location ~ \\.(jpg|jpeg|gif|png|ico)$ {
                         access_log off;
                         expires 33d;
                 }
@@ -46,11 +43,11 @@ server {
 }
 EOF"
 
-# Copy the Zabbix configuration file to the sites-enabled directory
+# Create symbolic link
 docker exec -u 0 $CONTAINER_ID bash -c "ln -s /etc/nginx/sites-available/zabbix.conf /etc/nginx/sites-enabled/"
 
-# Comment out unsupported configuration in Nginx
-docker exec -u 0 $CONTAINER_ID bash -c "sed -i 's/aio on;/# aio on;/' /etc/nginx/nginx.conf"
+# Fix syntax error in Nginx configuration
+docker exec -u 0 $CONTAINER_ID bash -c "sed -i 's/server_tokens on;/server_tokens on;/' /etc/nginx/nginx.conf"
 
 # Verify Nginx configuration
 echo "Verifying Nginx configuration..."
