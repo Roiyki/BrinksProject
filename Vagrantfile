@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "zabbix-server" do |server|
     server.vm.box = "ubuntu/focal64"
     # Configuring networking settings
-    server.vm.network "forwarded_port", guest: 8080, host: 8888
+    server.vm.network "forwarded_port", guest: 8090, host: 8888
     server.vm.network "forwarded_port", guest: 3000, host: 3000
     server.vm.network "private_network", ip: "192.168.50.10"
     # Creating linked directories between docker volumes and local directories
