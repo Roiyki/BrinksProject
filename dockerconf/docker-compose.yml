@@ -61,16 +61,14 @@ services:
     network_mode: "host"
     restart: unless-stopped
     environment:
-      - ZBX_SERVER_HOST=127.0.0.1 #the IP/Dns of Zabbix server
+      - ZBX_SERVER_HOST=zabbix-server #the IP/Dns of Zabbix server
+      - ZBX_PASSIVE_ALLOW=true
+    ports:
+      - 10050:10050
+    extra_hosts:
+      - "zabbix-server:$(docker exec dockerconf_zabbix-web_1 hostname -i | tr -d '\r')"
     env_file:
       - .env
-
-
-  # adminer:  # for accessing databases
-  #   image: adminer
-  #   restart: always
-  #   ports:
-  #     - 8080:8080
 
 
   grafana-xxl:  
