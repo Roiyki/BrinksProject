@@ -56,7 +56,7 @@ services:
 
 
   zabbix-agent:   # Zabbix agent service that tracks usage and send to zabbix server
-    image: zabbix/zabbix-agent:latest
+    image: zabbix/zabbix-agent2:ubuntu-latest
     privileged: true   #access mode for allowing resource access
     network_mode: "host"
     restart: unless-stopped

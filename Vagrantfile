@@ -16,6 +16,7 @@ Vagrant.configure("2") do |config|
     server.vm.network "forwarded_port", guest: 8080, host: 8090
     server.vm.network "forwarded_port", guest: 80, host: 8888
     server.vm.network "forwarded_port", guest: 3000, host: 3000
+    server.vm.network "forwarded_port", guest: 10050, host: 10050
     server.vm.network "private_network", ip: "192.168.50.10"
     # Creating linked directories between docker volumes and local directories
     server.vm.synced_folder ".", "/home/vagrant/local"
@@ -31,4 +32,4 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "provisioning/repo_setup.sh"
   config.vm.provision "shell", path: "provisioning/nginx_setup.sh"
   end
-
+end
