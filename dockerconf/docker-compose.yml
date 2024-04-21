@@ -66,7 +66,7 @@ services:
     ports:
       - 10050:10050
     extra_hosts:
-      - "zabbix-server:$(docker exec dockerconf_zabbix-web_1 hostname -i | tr -d '\r')"
+      - "zabbix-server:$ZABBIX_SERVER_IP
     env_file:
       - .env
 

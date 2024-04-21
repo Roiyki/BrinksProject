@@ -14,6 +14,8 @@ fi
 cd BrinksProject/dockerconf
 ln -s /home/vagrant/local/.env /home/vagrant/project/BrinksProject/dockerconf/.env
 # Starting the Docker-Compose
+ZABBIX_SERVER_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' dockerconf_zabbix-web_1)
+sed -i "s/zabbix-server:.*/zabbix-server:$ZABBIX_SERVER_IP/" docker-compose.yml
 docker-compose up -d
 !/bin/bash
 
