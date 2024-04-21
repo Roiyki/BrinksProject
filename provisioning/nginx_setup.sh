@@ -12,7 +12,7 @@ sed -i 's/listen 8080;/listen 80;/g' /etc/zabbix/nginx.conf
 
 # Create necessary directories
 docker cp ./nginx.conf $CONTAINER_ID:/etc/zabbix/nginx.conf
-
+sed -i "s/zabbix-server:.*/zabbix-server:$ZABBIX_SERVER_IP/" docker-compose.yml
 
 echo "Nginx configured to serve Zabbix web interface on port 80"
 echo "All done"
