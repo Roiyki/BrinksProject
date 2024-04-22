@@ -15,9 +15,7 @@ cd BrinksProject/dockerconf
 ln -s /home/vagrant/local/.env /home/vagrant/project/BrinksProject/dockerconf/.env
 # Starting the Docker-Compose
 docker-compose up -d
-ZABBIX_SERVER_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' dockerconf_zabbix-web_1)
-sed -i "s/zabbix-server:.*/zabbix-server:$ZABBIX_SERVER_IP/" docker-compose.yml
-!/bin/bash
+
 
 # Step a: Download and install Zabbix repository
 # wget https://repo.zabbix.com/zabbix/6.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.4-1+ubuntu20.04_all.deb

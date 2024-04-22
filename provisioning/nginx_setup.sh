@@ -1,4 +1,4 @@
-/bin/bash
+#!/bin/bash
 echo "Provisioning script #6 is running"
 
 # Get the container ID
