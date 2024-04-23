@@ -1,7 +1,8 @@
 #!/bin/bash
 echo "Provisioning script #2 is running"
 
-sudo mkdir -p /var/lib/docker/volumes/postgres/
-sudo mkdir -p /var/lib/docker/volumes/zabbix/
-sudo mkdir -p /var/lib/docker/volumes/graf_data/
-sudo mkdir -p /var/lib/docker/volumes/graf_config/
+sudo mkdir -p /var/lib/docker/volumes/postgresql-data/
+sudo mkdir -p /var/lib/docker/volumes/zabbix-server-data/
+sudo mkdir -p /var/lib/docker/volumes/zabbix-export-data/
+sudo mkdir -p /var/lib/docker/volumes/zabbix-web-data/
+sudo mkdir -p /var/lib/docker/volumes/grafana-storage/

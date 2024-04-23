@@ -22,10 +22,11 @@ Vagrant.configure("2") do |config|
     server.vm.network "private_network", ip: "192.168.50.10"
     # Creating linked directories between docker volumes and local directories
     server.vm.synced_folder ".", "/home/vagrant/local"
-    server.vm.synced_folder "C:/Brinks/Volumes/postgres", "/var/lib/docker/volumes/postgres/"
-    server.vm.synced_folder "C:/Brinks/Volumes/zabbix", "/var/lib/docker/volumes/zabbix/"
-    server.vm.synced_folder "C:/Brinks/Volumes/graf_data", "/var/lib/docker/volumes/graf_data/"
-    server.vm.synced_folder "C:/Brinks/Volumes/graf_config", "/var/lib/docker/volumes/graf_config/"
+    server.vm.synced_folder "C:/Brinks/Volumes/postgres", "/var/lib/docker/volumes/postgresql-data/"
+    server.vm.synced_folder "C:/Brinks/Volumes/zabbix", "/var/lib/docker/volumes/zabbix-server-data/"
+    server.vm.synced_folder "C:/Brinks/Volumes/zabbix-export", "/var/lib/docker/volumes/zabbix-export-data/"
+    server.vm.synced_folder "C:/Brinks/Volumes/zabbix-web", "/var/lib/docker/volumes/zabbix-web-data/"
+    server.vm.synced_folder "C:/Brinks/Volumes/grafana", "/var/lib/docker/volumes/grafana-storage/"
     # Starting the provisioning commands
   config.vm.provision "shell", path: "provisioning/variables_load.sh"
   config.vm.provision :reload

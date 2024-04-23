@@ -13,7 +13,7 @@ services:
     env_file:
       - .env
     volumes:
-       - PG_DATA:/var/lib/postgresql/data #data storage
+      - postgresql-data:/var/lib/postgresql/data #data storage
 
 
   zabbix-server:     # The main Zabbix Server Software Service
@@ -34,7 +34,8 @@ services:
     ports:
       - 10051:10051
     volumes:  # Volumes for scripts and related files
-      - ZABBIX_ALERTSCRIPTS:/usr/lib/zabbix/alertscripts
+      - zabbix-export-data:/var/lib/zabbix/export
+      - zabbix-server-data:/var/lib/zabbix
 
 
   zabbix-web:    # The main Zabbix web UI or interface
@@ -55,6 +56,8 @@ services:
       - zabbix-server
     ports:    # Port where Zabbix UI is available
       - 8090:80
+    volumes:
+      - zabbix-web-data:/usr/share/zabbix
 
 
   grafana:  
@@ -68,12 +71,13 @@ services:
      - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=alexanderzobnin-zabbix-app
      - allow_loading_unsigned_plugins=alexanderzobnin-zabbix-app
     volumes:
-     - GRAFANA_CONFIG:/etc/grafana
-     - GRAFANA_DATA:/var/lib/grafana
+      - grafana-storage:/var/lib/grafana
 
 
 volumes:
-  PG_DATA:
-  ZABBIX_ALERTSCRIPTS:
-  GRAFANA_CONFIG:
-  GRAFANA_DATA:
+  postgresql-data:
+  zabbix-server-data:
+  zabbix-snmptraps-data:
+  zabbix-export-data:
+  zabbix-web-data:
+  grafana-storage:

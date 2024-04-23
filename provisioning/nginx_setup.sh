@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Provisioning script #6 is running"
+echo "Provisioning script #5 is running"
 
 # Get the container ID
 CONTAINER_ID=$(docker ps -qf "name=dockerconf_zabbix-web_1")
