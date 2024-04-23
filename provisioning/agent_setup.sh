@@ -16,7 +16,7 @@ CONTAINER_IP_SERVER=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.I
 CONTAINER_NAME_WEB="dockerconf_zabbix-web_1"
 CONTAINER_IP_WEB=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER_NAME_WEB)
 # Update Zabbix Server Configuration
-sudo sed -i '133s/^Server=.*/Server=127.0.0.1,'"$CONTAINER_IP_WEB"','"$CONTAINER_IP_SERVER"'/' /etc/zabbix/zabbix_agent2.conf
+sudo sed -i '80s/^Server=.*/Server=127.0.0.1,'"$CONTAINER_IP_WEB"','"$CONTAINER_IP_SERVER"'/' /etc/zabbix/zabbix_agent2.conf
 
 #Restart zabbix agent to read changes in the configuration
 sudo systemctl restart zabbix-agent2
