@@ -27,12 +27,12 @@ Vagrant.configure("2") do |config|
     server.vm.synced_folder "C:/Brinks/Volumes/graf_data", "/var/lib/docker/volumes/graf_data/"
     server.vm.synced_folder "C:/Brinks/Volumes/graf_config", "/var/lib/docker/volumes/graf_config/"
     # Starting the provisioning commands
-  # config.vm.provision "shell", path: "provisioning/variables_load.sh"
-  # config.vm.provision :reload
-  # config.vm.provision "shell", path: "provisioning/volume_dirs.sh"
-  # config.vm.provision "shell", path: "provisioning/docker.sh"
-  # config.vm.provision "shell", path: "provisioning/repo_setup.sh"
-  # config.vm.provision "shell", path: "provisioning/nginx_setup.sh"
+  config.vm.provision "shell", path: "provisioning/variables_load.sh"
+  config.vm.provision :reload
+  config.vm.provision "shell", path: "provisioning/volume_dirs.sh"
+  config.vm.provision "shell", path: "provisioning/docker.sh"
+  config.vm.provision "shell", path: "provisioning/repo_setup.sh"
+  config.vm.provision "shell", path: "provisioning/nginx_setup.sh"
   config.vm.provision "shell", path: "provisioning/agent_setup.sh"
   end
 end
