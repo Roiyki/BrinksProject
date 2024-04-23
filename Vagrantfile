@@ -17,6 +17,8 @@ Vagrant.configure("2") do |config|
     server.vm.network "forwarded_port", guest: 80, host: 8888
     server.vm.network "forwarded_port", guest: 3000, host: 3000
     server.vm.network "forwarded_port", guest: 10051, host: 10051
+    server.vm.network "forwarded_port", guest: 10050, host: 10050 
+    server.vm.network "forwarded_port", guest: 5432, host: 5432
     server.vm.network "private_network", ip: "192.168.50.10"
     # Creating linked directories between docker volumes and local directories
     server.vm.synced_folder ".", "/home/vagrant/local"
@@ -25,12 +27,12 @@ Vagrant.configure("2") do |config|
     server.vm.synced_folder "C:/Brinks/Volumes/graf_data", "/var/lib/docker/volumes/graf_data/"
     server.vm.synced_folder "C:/Brinks/Volumes/graf_config", "/var/lib/docker/volumes/graf_config/"
     # Starting the provisioning commands
-  config.vm.provision "shell", path: "provisioning/variables_load.sh"
-  config.vm.provision :reload
-  config.vm.provision "shell", path: "provisioning/volume_dirs.sh"
-  config.vm.provision "shell", path: "provisioning/docker.sh"
-  config.vm.provision "shell", path: "provisioning/repo_setup.sh"
-  config.vm.provision "shell", path: "provisioning/nginx_setup.sh"
+  # config.vm.provision "shell", path: "provisioning/variables_load.sh"
+  # config.vm.provision :reload
+  # config.vm.provision "shell", path: "provisioning/volume_dirs.sh"
+  # config.vm.provision "shell", path: "provisioning/docker.sh"
+  # config.vm.provision "shell", path: "provisioning/repo_setup.sh"
+  # config.vm.provision "shell", path: "provisioning/nginx_setup.sh"
   config.vm.provision "shell", path: "provisioning/agent_setup.sh"
   end
 end

@@ -9,11 +9,14 @@ sudo apt update
 # Install Zabbix Agent and plugins
 sudo apt install zabbix-agent2 zabbix-agent2-plugin-*
 
-# Extract Container ID
-CONTAINER_ID=$(docker ps -qf "name=dockerconf_zabbix-server_1")
+# Extract Container IP
+CONTAINER_NAME_SERVER="dockerconf_zabbix-server_1"
+CONTAINER_IP_SERVER=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER_NAME_SERVER)
 
+CONTAINER_NAME_WEB="dockerconf_zabbix-web_1"
+CONTAINER_IP_WEB=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER_NAME_WEB)
 # Update Zabbix Server Configuration
-sudo sed -i "s/Server=*/Server=127.0.0.1,$CONTAINER_ID/g" /etc/zabbix/zabbix_agentd.conf
+sudo sed -i '133s/^Server=.*/Server=127.0.0.1,'"$CONTAINER_IP_WEB"','"$CONTAINER_IP_SERVER"'/' /etc/zabbix/zabbix_agent2.conf
 
 #Restart zabbix agent to read changes in the configuration
 sudo systemctl restart zabbix-agent2
