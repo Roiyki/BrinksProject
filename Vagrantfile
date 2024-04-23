@@ -35,5 +35,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "provisioning/repo_setup.sh"
   config.vm.provision "shell", path: "provisioning/nginx_setup.sh"
   config.vm.provision "shell", path: "provisioning/agent_setup.sh"
+  server.vm.provision "shell", path: "sync_data.sh", run: "always"
   end
 end
