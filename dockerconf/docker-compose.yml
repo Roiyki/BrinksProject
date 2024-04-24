@@ -13,8 +13,8 @@ services:
       PGDATA: /tmp
     env_file:
       - .env
-    volumes:
-      - /home/vagrant/data/postgre:/var/lib/postgresql/data #data storage
+    # volumes:
+    #   - /home/vagrant/data/postgre:/var/lib/postgresql/data #data storage
 
 
   zabbix-server:     # The main Zabbix Server Software Service
