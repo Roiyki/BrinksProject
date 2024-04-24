@@ -20,14 +20,15 @@ Vagrant.configure("2") do |config|
     server.vm.network "forwarded_port", guest: 10050, host: 10050 
     server.vm.network "forwarded_port", guest: 5432, host: 5432
     server.vm.network "private_network", ip: "192.168.50.10"
-    # Creating linked directories between docker volumes and local directories
-    server.vm.synced_folder ".", "/home/vagrant/local"
-    server.vm.synced_folder "C:/Brinks/Volumes/postgres", "/var/lib/docker/volumes/postgresql-data/"
-    server.vm.synced_folder "C:/Brinks/Volumes/zabbix", "/var/lib/docker/volumes/zabbix-server-data/"
-    server.vm.synced_folder "C:/Brinks/Volumes/zabbix-export", "/var/lib/docker/volumes/zabbix-export-data/"
-    server.vm.synced_folder "C:/Brinks/Volumes/zabbix-web", "/var/lib/docker/volumes/zabbix-web-data/"
-    server.vm.synced_folder "C:/Brinks/Volumes/grafana", "/var/lib/docker/volumes/grafana-storage/"
+    # Bind mounts from Docker Compose to Vagrant VM
+    server.vm.synced_folder ".", "/home/vagrant/local", create: true, owner: "vagrant", group: "vagrant"
+    server.vm.synced_folder "/Brinks/Volumes/postgres", "/vagrant/postgre", create: true, owner: "vagrant", group: "vagrant"
+    server.vm.synced_folder "/Brinks/Volumes/zabbix", "/vagrant/zabbix", create: true, owner: "vagrant", group: "vagrant"
+    server.vm.synced_folder "/Brinks/Volumes/zabbix-export", "/vagrant/zabbix-export", create: true, owner: "vagrant", group: "vagrant"
+    server.vm.synced_folder "/Brinks/Volumes/zabbix-web", "/vagrant/zabbix-web", create: true, owner: "vagrant", group: "vagrant"
+    server.vm.synced_folder "/Brinks/Volumes/grafana", "/vagrant/grafana", create: true, owner: "vagrant", group: "vagrant"
     # Starting the provisioning commands
+  config.vm.provision "shell", inline: "mkdir -p /vagrant" 
   config.vm.provision "shell", path: "provisioning/variables_load.sh"
   config.vm.provision :reload
   config.vm.provision "shell", path: "provisioning/volume_dirs.sh"
@@ -35,6 +36,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "provisioning/repo_setup.sh"
   config.vm.provision "shell", path: "provisioning/nginx_setup.sh"
   config.vm.provision "shell", path: "provisioning/agent_setup.sh"
-  server.vm.provision "shell", path: "provisioning/sync_data.sh", run: "always"
+  # server.vm.provision "shell", path: "provisioning/sync_data.sh", run: "always"
   end
 end
