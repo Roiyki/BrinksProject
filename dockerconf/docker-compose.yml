@@ -13,7 +13,7 @@ services:
     env_file:
       - .env
     volumes:
-      - /vagrant/postgre:/var/lib/postgresql/data #data storage
+      - /home/vagrant/data/postgre:/var/lib/postgresql/data #data storage
 
 
   zabbix-server:     # The main Zabbix Server Software Service
@@ -34,8 +34,8 @@ services:
     ports:
       - 10051:10051
     volumes:  # Volumes for scripts and related files
-      - /vagrant/zabbix-export:/var/lib/zabbix/export
-      - /vagrant/zabbix:/var/lib/zabbix
+      - /home/vagrant/data/zabbix-export:/var/lib/zabbix/export
+      - /home/vagrant/data/zabbix:/var/lib/zabbix
 
 
   zabbix-web:    # The main Zabbix web UI or interface
@@ -57,7 +57,7 @@ services:
     ports:    # Port where Zabbix UI is available
       - 8090:80
     volumes:
-      - /vagrant/zabbix-web:/usr/share/zabbix
+      - /home/vagrant/data/zabbix-web:/usr/share/zabbix
 
 
   grafana:  
@@ -71,6 +71,6 @@ services:
      - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=alexanderzobnin-zabbix-app
      - allow_loading_unsigned_plugins=alexanderzobnin-zabbix-app
     volumes:
-      - /vagrant/grafana:/var/lib/grafana
+      - /home/vagrant/data/grafana:/var/lib/grafana
 
 
