@@ -13,6 +13,15 @@ sed -i 's/listen 8080;/listen 80;/g' nginx.conf
 # Step 3: Copy the modified Nginx configuration file back to the container
 docker cp nginx.conf $CONTAINER_ID:/etc/zabbix/nginx.conf
 
+# Step 4: Copy the Nginx configuration file from the container
+docker cp $CONTAINER_ID:/etc/nginx/nginx.conf nginx.conf
+
+# Step 5: Modify the Nginx configuration file
+sed -i 's/server_tokens.*;/server_tokens off;/g' nginx.conf
+
+# Step 6: Copy the Nginx configuration file from the container
+docker cp nginx.conf $CONTAINER_ID:/etc/nginx/nginx.conf
+
 # Step 4: Reload Nginx inside the container
 docker exec -u 0 $CONTAINER_ID nginx -s reload
 

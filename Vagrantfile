@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
     # Bind mounts from Docker Compose to Vagrant VM
     server.vm.synced_folder ".", "/home/vagrant/local", create: true, owner: "vagrant", group: "vagrant"
     server.vm.synced_folder "/Brinks/Volumes/postgres", "/home/vagrant/data/postgre", create: true, owner: "vagrant", group: "vagrant"
-    server.vm.synced_folder "/Brinks/Volumes/zabbix", "/vagrant/zabbix", create: true, owner: "vagrant", group: "vagrant"
+    server.vm.synced_folder "/Brinks/Volumes/zabbix", "/home/vagrant/data/zabbix", create: true, owner: "vagrant", group: "vagrant"
     server.vm.synced_folder "/Brinks/Volumes/zabbix-export", "/home/vagrant/data/zabbix-export", create: true, owner: "vagrant", group: "vagrant"
     server.vm.synced_folder "/Brinks/Volumes/zabbix-web", "/home/vagrant/data/zabbix-web", create: true, owner: "vagrant", group: "vagrant"
     server.vm.synced_folder "/Brinks/Volumes/grafana", "/home/vagrant/data/grafana", create: true, owner: "vagrant", group: "vagrant"
