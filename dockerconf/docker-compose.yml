@@ -10,7 +10,6 @@ services:
       POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
       POSTGRES_DB: '${POSTGRES_DB}'
       POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS}
-      PGDATA: /var/lib/postgresql/data
     env_file:
       - .env
     volumes:
