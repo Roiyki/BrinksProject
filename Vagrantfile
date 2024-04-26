@@ -22,10 +22,8 @@ Vagrant.configure("2") do |config|
     server.vm.network "private_network", ip: "192.168.50.10"
     # Bind mounts from Docker Compose to Vagrant VM
     server.vm.synced_folder ".", "/home/vagrant/local", create: true, owner: "vagrant", group: "vagrant"
-    server.vm.synced_folder "/Brinks/Volumes/postgres", "/home/vagrant/data/postgre", create: true, owner: "vagrant", group: "vagrant"
+    server.vm.synced_folder "/Brinks/Volumes/backup", "/home/vagrant/backup", create: true, owner: "vagrant", group: "vagrant"
     server.vm.synced_folder "/Brinks/Volumes/zabbix", "/home/vagrant/data/zabbix", create: true, owner: "vagrant", group: "vagrant"
-    server.vm.synced_folder "/Brinks/Volumes/zabbix-export", "/home/vagrant/data/zabbix-export", create: true, owner: "vagrant", group: "vagrant"
-    server.vm.synced_folder "/Brinks/Volumes/zabbix-web", "/home/vagrant/data/zabbix-web", create: true, owner: "vagrant", group: "vagrant"
     server.vm.synced_folder "/Brinks/Volumes/grafana", "/home/vagrant/data/grafana", create: true, owner: "vagrant", group: "vagrant"
     # Starting the provisioning commands
   config.vm.provision "shell", path: "provisioning/variables_load.sh"
@@ -35,6 +33,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "provisioning/repo_setup.sh"
   config.vm.provision "shell", path: "provisioning/nginx_setup.sh"
   config.vm.provision "shell", path: "provisioning/agent_setup.sh"
+  config.vm.provision "shell", path: "provisioning/backup_data.sh"
+  config.vm.provision "shell", path: "provisioning/restore_data.sh"
   # server.vm.provision "shell", path: "provisioning/sync_data.sh", run: "always"
   end
 end
