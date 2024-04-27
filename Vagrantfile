@@ -25,7 +25,9 @@ Vagrant.configure("2") do |config|
     server.vm.synced_folder "/Brinks/Volumes/backup", "/home/vagrant/backup", create: true, owner: "vagrant", group: "vagrant"
     server.vm.synced_folder "/Brinks/Volumes/zabbix", "/home/vagrant/data/zabbix", create: true, owner: "vagrant", group: "vagrant"
     server.vm.synced_folder "/Brinks/Volumes/grafana", "/home/vagrant/data/grafana", create: true, owner: "vagrant", group: "vagrant"
-    Starting the provisioning commands
+    server.vm.synced_folder "/Brinks/Volumes/agent-lib", "/var/lib/zabbix", create: true, owner: "vagrant", group: "vagrant"    
+    server.vm.synced_folder "/Brinks/Volumes/agent-conf", "/etc/zabbix", create: true, owner: "vagrant", group: "vagrant"
+    # Starting the provisioning commands
   config.vm.provision "shell", path: "provisioning/variables_load.sh"
   config.vm.provision :reload
   config.vm.provision "shell", path: "provisioning/volume_dirs.sh"
@@ -33,7 +35,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "provisioning/repo_setup.sh"
   config.vm.provision "shell", path: "provisioning/nginx_setup.sh"
   config.vm.provision "shell", path: "provisioning/agent_setup.sh"
-  # config.vm.provision "shell", path: "provisioning/backup_data.sh"
-  # config.vm.provision "shell", path: "provisioning/restore_data.sh"
+  config.vm.provision "shell", path: "provisioning/backup_data.sh"
+  config.vm.provision "shell", path: "provisioning/restore_data.sh"
   end
 end
