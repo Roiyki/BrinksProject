@@ -1,30 +1,24 @@
-#!/bin/bash
-
-# Check if the backup directory exists
-if [ -d /home/vagrant/backup/data ]; then
+# Check if the backup file exists
+if [ -f /home/vagrant/backup/backup_file.sql ]; then
     echo "Restoring database from backup..."
 
     # Set the PGPASSWORD environment variable
     export PGPASSWORD=$POSTGRES_PASSWORD
+    CONTAINER_ID=$(docker ps -qf "name=dockerconf_postgres-server_1")
+    # Run psql command inside the container to restore the database
+    docker exec -i $CONTAINER_ID /bin/bash -c "PGPASSWORD=$POSTGRES_PASSWORD psql -U $POSTGRES_USER -h localhost -p 5432 -d $POSTGRES_DB" < /home/vagrant/backup/backup_file.sql
 
-    CONTAINER_NAME="dockerconf_postgres-server_1"  # Update with your container name
+    # Check if the restore was successful
+    if [ $? -eq 0 ]; then
+        echo "Database restore completed successfully."
+    else
+        echo "Error: Database restore failed!"
+        exit 1
+    fi
 
-    # Stop the PostgreSQL container to ensure a consistent restore
-    echo "Stopping container $CONTAINER_NAME..."
-    docker stop $CONTAINER_NAME
-
-    # Copy the data directory from the backup to the container
-    echo "Copying data directory to container $CONTAINER_NAME..."
-    docker cp /home/vagrant/backup/data $CONTAINER_NAME:/var/lib/postgresql
-
-    # Start the PostgreSQL container
-    echo "Starting container $CONTAINER_NAME..."
-    docker start $CONTAINER_NAME
-
-    echo "Database restore completed successfully."
     # Unset the PGPASSWORD environment variable
     unset PGPASSWORD
 else
-    echo "Error: Backup directory not found!"
+    echo "Error: Backup file not found!"
     exit 1
 fi

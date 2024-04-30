@@ -36,6 +36,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "provisioning/nginx_setup.sh"
   config.vm.provision "shell", path: "provisioning/agent_setup.sh"
   config.vm.provision "shell", path: "provisioning/backup_data.sh"
-  config.vm.provision "shell", path: "provisioning/restore_data.sh"
+  # config.vm.provision "shell", path: "provisioning/restore_data.sh"
   end
 end
